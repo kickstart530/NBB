@@ -51,21 +51,19 @@ formatNumber=(n,dec=0)=>{
    return n.toFixed(dec);
 }
 
-utils.getNearest=(loc,points)=>{
-   let minDist=Number.MAX_SAFE_INTEGER;
-   let nearestIndex=0;
+utils.getNearest=(loc,points,k=1)=>{
+   const obj= points.map((val,ind)=>{
+      return {ind, val};
+   });
+   const sorted= obj.sort((a,b)=>{
+      return utils.distance(loc,a.val)- 
+      utils.distance(loc,b.val) 
+   });
 
-   for(let i=0;i<points.length;i++){
-      const point=points[i];
-      const d=utils.distance(loc,point);
-
-      if(d<minDist){
-         minDist=d;
-         nearestIndex=i;
-      }
-   }
-   return nearestIndex;
+   const indices = sorted.map((obj)=>obj.ind);
+   return indices.slice(0,k);
 }
+
 utils.invLerp=(a,b,v)=>{
    return (v-a)/(b-a);
 }
@@ -73,14 +71,13 @@ utils.invLerp=(a,b,v)=>{
 utils.normalizePoints=(points,minMax)=>{
    let min,max;
    const dimesnions=points[0].length;
-   min=[...points[0]];
-   max=[...points[0]];
-
    if(minMax){
       min = minMax.min;
       max = minMax.max;
    }
    else{
+      min=[...points[0]];
+      max=[...points[0]];
       for(let i=1;i<points.length;i++){
          for(let j=0;j<dimesnions;j++){
             min[j]=Math.min(min[j],points[i][j]);
