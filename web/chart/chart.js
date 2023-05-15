@@ -262,7 +262,7 @@
             
             graphics.drawPoint(ctx,pixelLoc,"rgba(255,255,255,0.7)",10000000)
             //graphics.drawPoint(ctx,pixelLoc, "black");
-
+            ctx.strokeStyle="gray";
             for(const sample of this.nearestSamples){
                const point = math.remapPoint(
                   this.dataBounds,
